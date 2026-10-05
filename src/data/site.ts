@@ -8,8 +8,7 @@ export const site = {
     email: 'gui.gastaldo@gmail.com',
     linkedin: 'https://www.linkedin.com/in/guilhermebondezan',
     github: 'https://github.com/guibndz',
-    // TODO(Guilherme): trocar pelo repositório deste site quando ele for criado (etapa 6).
-    source: 'https://github.com/guibndz',
+    source: 'https://github.com/guibndz/portfolio',
   },
 } as const;
 
