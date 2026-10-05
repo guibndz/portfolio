@@ -1,15 +1,76 @@
 ---
 import Section from '../components/Section.astro';
+import { site } from '../data/site';
+
+const linkedinHandle = site.links.linkedin.replace('https://www.', '');
+const githubHandle = site.links.github.replace('https://', '');
 ---
 
 <Section id="contato">
   <Fragment slot="title">Onde me <em>encontrar</em></Fragment>
-  <p class="placeholder">Conteúdo na etapa 3.</p>
+  <div class="contact">
+    <p class="contact__text">
+      Busco estágio em backend ou full stack, remoto ou presencial em Guarapuava e região. Para conversar,
+      escreva para o meu e-mail ou me chame no LinkedIn.
+    </p>
+    <a class="contact__email" href={`mailto:${site.links.email}`}>{site.links.email}</a>
+    <dl class="contact__list">
+      <div>
+        <dt class="label">LinkedIn</dt>
+        <dd><a href={site.links.linkedin}>{linkedinHandle}</a></dd>
+      </div>
+      <div>
+        <dt class="label">GitHub</dt>
+        <dd><a href={site.links.github}>{githubHandle}</a></dd>
+      </div>
+    </dl>
+  </div>
 </Section>
 
 <style>
-  .placeholder {
-    color: var(--text-faint);
+  .contact {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .contact__text {
+    max-width: var(--measure);
+    color: var(--text-muted);
+  }
+
+  .contact__email {
+    justify-self: start;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 0.9286rem + 2.8571vw, 3.5rem);
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+    color: var(--text);
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.18em;
+  }
+
+  .contact__email:hover {
+    color: var(--accent-text);
+    text-decoration-color: currentColor;
+  }
+
+  .contact__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5) var(--space-8);
+  }
+
+  .contact__list div {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .contact__list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-family: var(--font-mono);
     font-size: var(--text-small);
   }
 </style>

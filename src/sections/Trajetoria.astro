@@ -1,15 +1,125 @@
 ---
 import Section from '../components/Section.astro';
+import { trajetoria } from '../data/trajetoria';
 ---
 
 <Section id="trajetoria">
   <Fragment slot="title">Contada pelo <em>git log</em></Fragment>
-  <p class="placeholder">Conteúdo na etapa 3.</p>
+  <p class="intro">
+    Ainda não tenho cargos para listar. Tenho repositórios, do mais recente ao primeiro, como no{' '}
+    <code>git log</code>. O hash é o do primeiro commit de cada um.
+  </p>
+  <ol class="log" role="list">
+    {
+      trajetoria.map((marco) => (
+        <li class="log__item">
+          <p class="log__meta">
+            <span class="log__hash">{marco.commit}</span>
+            <span>{marco.periodo}</span>
+          </p>
+          <p class="log__repos">
+            {marco.repos.map((repo, index) => (
+              <>
+                {index > 0 && <span class="log__and"> e </span>}
+                <a href={repo.url}>{repo.nome}</a>
+              </>
+            ))}
+          </p>
+          <p class="log__text">{marco.texto}</p>
+        </li>
+      ))
+    }
+  </ol>
 </Section>
 
 <style>
-  .placeholder {
+  .intro {
+    max-width: var(--measure);
+    margin-block-end: var(--space-7);
+    color: var(--text-muted);
+  }
+
+  /* Linha vertical com um ponto por marco, no espírito do git log --graph. */
+  .log {
+    --dot: 0.625rem;
+    --dot-top: calc(var(--space-4) + 0.45em);
+    display: grid;
+  }
+
+  .log__item {
+    position: relative;
+    display: grid;
+    gap: var(--space-1);
+    padding-block: var(--space-4);
+    padding-inline-start: calc(var(--dot) + var(--space-5));
+  }
+
+  /* Segmento do ponto deste item até o ponto do próximo; o último não tem. */
+  .log__item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    inset-block: calc(var(--dot-top) + var(--dot)) calc(-1 * var(--dot-top));
+    inset-inline-start: calc(var(--dot) / 2 - 0.5px);
+    border-inline-start: 1px solid var(--line-strong);
+  }
+
+  .log__item::before {
+    content: '';
+    position: absolute;
+    inset-block-start: var(--dot-top);
+    inset-inline-start: 0;
+    inline-size: var(--dot);
+    block-size: var(--dot);
+    border: 1px solid var(--text-faint);
+    border-radius: 50%;
+    background: var(--bg);
+  }
+
+  .log__item:first-child::before {
+    border-color: var(--accent-text);
+    background: var(--accent-text);
+  }
+
+  .log__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: 0.04em;
     color: var(--text-faint);
+  }
+
+  .log__hash {
+    color: var(--accent-text);
+  }
+
+  .log__repos {
+    font-family: var(--font-mono);
     font-size: var(--text-small);
+    font-weight: 500;
+  }
+
+  .log__and {
+    color: var(--text-faint);
+  }
+
+  .log__text {
+    max-width: var(--measure);
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 48rem) {
+    .log__item {
+      grid-template-columns: 12rem minmax(0, 1fr);
+      column-gap: var(--space-6);
+    }
+
+    .log__meta {
+      grid-row: span 2;
+      flex-direction: column;
+      gap: var(--space-1);
+      padding-block-start: 0.2em;
+    }
   }
 </style>

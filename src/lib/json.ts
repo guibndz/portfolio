@@ -12,7 +12,22 @@ function scalar(value: string | number | boolean | null): string {
   return span('literal', String(value));
 }
 
+const INLINE_ARRAY_MAX = 52;
+
 function collect(value: Json, depth: number, prefix: string, suffix: string, lines: Line[]): void {
+  // Arrays curtos só de valores simples ficam numa linha: ["PHP", "Laravel"].
+  if (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every((item) => item === null || typeof item !== 'object') &&
+    JSON.stringify(value).length <= INLINE_ARRAY_MAX
+  ) {
+    const items = value.map((item) => scalar(item as string | number | boolean | null));
+    const html = span('punct', '[') + items.join(`${span('punct', ',')} `) + span('punct', ']');
+    lines.push({ depth, html: prefix + html + suffix });
+    return;
+  }
+
   if (value !== null && typeof value === 'object') {
     const entries: [string | null, Json][] = Array.isArray(value)
       ? value.map((item) => [null, item])

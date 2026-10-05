@@ -1,15 +1,29 @@
 ---
+import { getCollection } from 'astro:content';
 import Section from '../components/Section.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const projetos = (await getCollection('projetos', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.ordem - b.data.ordem,
+);
 ---
 
 <Section id="projetos">
   <Fragment slot="title">Problema, decisão e <em>limite</em></Fragment>
-  <p class="placeholder">Conteúdo na etapa 3.</p>
+  <div class="projects">
+    {projetos.map((projeto, index) => <ProjectCard projeto={projeto} destaque={index === 0} />)}
+  </div>
 </Section>
 
 <style>
-  .placeholder {
-    color: var(--text-faint);
-    font-size: var(--text-small);
+  .projects {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 48rem) {
+    .projects {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 </style>

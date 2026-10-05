@@ -1,0 +1,176 @@
+---
+// Fluxo de uma requisição autenticada no InstaClone API.
+// Fonte: compose.yaml (serviços app e mysql), routes/api.php (auth:sanctum),
+// app/Http/Controllers, app/Services e app/Models.
+const nodes = [
+  { y: 142, title: 'Sanctum', sub: 'middleware auth:sanctum' },
+  { y: 206, title: 'Controller', sub: 'recebe e responde JSON' },
+  { y: 270, title: 'Service', sub: 'regra de negócio' },
+  { y: 334, title: 'Eloquent', sub: 'models e relações' },
+];
+const nodeX = 48;
+const nodeW = 204;
+const nodeH = 44;
+const cx = nodeX + nodeW / 2;
+---
+
+<svg
+  class="flow"
+  viewBox="0 0 300 512"
+  role="img"
+  aria-labelledby="flow-title flow-desc"
+>
+  <title id="flow-title">Fluxo de uma requisição no InstaClone API</title>
+  <desc id="flow-desc">
+    O cliente HTTP envia a requisição com um token Bearer. Dentro do Docker Compose, o serviço app,
+    com FrankenPHP na porta 8000, passa a requisição pelo middleware do Sanctum, que valida o token,
+    depois pelo Controller, pelo Service, onde fica a regra de negócio, e pelo Eloquent, que consulta
+    o serviço mysql na porta 3306.
+  </desc>
+
+  <defs>
+    <marker
+      id="flow-arrow"
+      viewBox="0 0 8 8"
+      refX="8"
+      refY="4"
+      markerUnits="userSpaceOnUse"
+      markerWidth="7"
+      markerHeight="7"
+      orient="auto"
+    >
+      <path class="flow__arrowhead" d="M0 0 L8 4 L0 8 z"></path>
+    </marker>
+  </defs>
+
+  <!-- Cliente, fora do Docker -->
+  <g class="flow__step" style="--i: 0">
+    <rect class="flow__node" x={nodeX} y="8" width={nodeW} height={nodeH} rx="4"></rect>
+    <text class="flow__title" x={cx} y="35" text-anchor="middle">Cliente HTTP</text>
+  </g>
+
+  <!-- Docker Compose -->
+  <g class="flow__step" style="--i: 1">
+    <rect class="flow__compose" x="2" y="80" width="296" height="424" rx="8"></rect>
+    <text class="flow__label" x="14" y="98">docker compose</text>
+  </g>
+
+  <!-- Requisição entra com o token -->
+  <g class="flow__step" style="--i: 1">
+    <line class="flow__edge" x1={cx} y1="52" x2={cx} y2="142" marker-end="url(#flow-arrow)"></line>
+    <text class="flow__sub" x={cx + 10} y="70">Bearer token</text>
+  </g>
+
+  <!-- Serviço app -->
+  <g class="flow__step" style="--i: 2">
+    <rect class="flow__service" x="16" y="110" width="268" height="290" rx="6"></rect>
+    <!-- Rótulos nos cantos para não cruzar a linha central do fluxo -->
+    <text class="flow__label" x="28" y="128">service app</text>
+    <text class="flow__label" x="272" y="393" text-anchor="end">FrankenPHP · :8000</text>
+  </g>
+
+  {
+    nodes.map((node, index) => (
+      <g class="flow__step" style={`--i: ${index + 2}`}>
+        <rect class="flow__node" x={nodeX} y={node.y} width={nodeW} height={nodeH} rx="4" />
+        <text class="flow__title" x={nodeX + 14} y={node.y + 19}>
+          {node.title}
+        </text>
+        <text class="flow__sub" x={nodeX + 14} y={node.y + 34}>
+          {node.sub}
+        </text>
+        {index < nodes.length - 1 && (
+          <line
+            class="flow__edge"
+            x1={cx}
+            y1={node.y + nodeH}
+            x2={cx}
+            y2={nodes[index + 1].y}
+            marker-end="url(#flow-arrow)"
+          />
+        )}
+      </g>
+    ))
+  }
+
+  <!-- Eloquent consulta o serviço mysql -->
+  <g class="flow__step" style="--i: 6">
+    <line class="flow__edge" x1={cx} y1="378" x2={cx} y2="436" marker-end="url(#flow-arrow)"></line>
+    <rect class="flow__node flow__node--db" x={nodeX} y="436" width={nodeW} height="52" rx="4"></rect>
+    <text class="flow__title" x={nodeX + 14} y="459">MySQL</text>
+    <text class="flow__sub" x={nodeX + 14} y="475">service mysql · :3306</text>
+  </g>
+</svg>
+
+<style>
+  .flow {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    overflow: visible;
+  }
+
+  .flow__compose {
+    fill: none;
+    stroke: var(--text-faint);
+    stroke-dasharray: 5 5;
+  }
+
+  .flow__service {
+    fill: color-mix(in oklab, var(--surface) 60%, transparent);
+    stroke: var(--line-strong);
+  }
+
+  .flow__node {
+    fill: var(--surface-raised);
+    stroke: var(--line-strong);
+  }
+
+  .flow__node--db {
+    stroke: var(--text-faint);
+  }
+
+  /* O caminho da requisição é o uso do roxo aqui: traço, não texto (3.4:1). */
+  .flow__edge {
+    stroke: var(--accent);
+    stroke-width: 1.5;
+  }
+
+  .flow__arrowhead {
+    fill: var(--accent);
+  }
+
+  .flow__title {
+    fill: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .flow__sub {
+    fill: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .flow__label {
+    fill: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .flow__step {
+      animation: flow-in 600ms var(--ease-out) both;
+      animation-delay: calc(200ms + var(--i) * 110ms);
+    }
+
+    @keyframes flow-in {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+    }
+  }
+</style>

@@ -45,4 +45,22 @@ const titleId = `${id}-titulo`;
   .section__body {
     margin-block-start: var(--space-7);
   }
+
+  /* Entrada discreta do título ao rolar. Sem suporte ou com movimento reduzido, fica estático. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .section__head {
+        animation: section-in linear both;
+        animation-timeline: view();
+        animation-range: entry 10% entry 70%;
+      }
+    }
+  }
+
+  @keyframes section-in {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+  }
 </style>

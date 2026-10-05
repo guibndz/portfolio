@@ -1,23 +1,85 @@
 ---
+import ButtonLink from '../components/ButtonLink.astro';
+import InstacloneFlow from '../components/diagrams/InstacloneFlow.astro';
 import { site } from '../data/site';
 ---
 
 <section id="inicio" class="hero" aria-labelledby="inicio-titulo">
-  <div class="container hero__inner">
-    <h1 id="inicio-titulo">{site.name}</h1>
-    <p class="hero__lede">
-      Backend em formação. Cada projeto aqui mostra o problema, a decisão e onde ela <em>deixa de
-      funcionar</em>.
-    </p>
-    <p class="placeholder">Selo, botões e diagrama do InstaClone na etapa 3.</p>
+  <div class="container hero__grid">
+    <div class="hero__text">
+      <p class="badge">
+        <span class="badge__dot" aria-hidden="true"></span>
+        <span>
+          {
+            site.availability.map((part, index) => (
+              <>
+                {index > 0 && <span class="badge__sep"> · </span>}
+                <span class="badge__part">{part}</span>
+              </>
+            ))
+          }
+        </span>
+      </p>
+      <h1 id="inicio-titulo">{site.name}</h1>
+      <p class="hero__lede">
+        Backend em formação. Cada projeto aqui mostra o problema, a decisão e onde ela <em>deixa de funcionar</em>.
+      </p>
+      <div class="hero__actions">
+        <ButtonLink href="#projetos" variant="primary">Ver projetos</ButtonLink>
+        <ButtonLink href={site.links.github}>GitHub</ButtonLink>
+        <ButtonLink href={site.links.linkedin}>LinkedIn</ButtonLink>
+      </div>
+    </div>
+
+    <figure class="hero__figure">
+      <InstacloneFlow />
+      <figcaption class="label">
+        Fig. 1 · Uma requisição no <a href="/projetos/instaclone-api">InstaClone API</a>
+      </figcaption>
+    </figure>
   </div>
 </section>
 
 <style>
-  .hero__inner {
+  .hero__grid {
     display: grid;
+    gap: var(--space-9);
+    padding-block-start: var(--space-8);
+  }
+
+  .hero__text {
+    display: grid;
+    align-content: start;
     gap: var(--space-6);
-    padding-block-start: var(--space-9);
+  }
+
+  .badge {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .badge__dot {
+    flex: none;
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: 50%;
+    background: var(--accent-text);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 25%, transparent);
+    transform: translateY(-0.05rem);
+  }
+
+  .badge__part {
+    white-space: nowrap;
+  }
+
+  .badge__part:first-child {
+    color: var(--text);
   }
 
   .hero__lede {
@@ -32,8 +94,31 @@ import { site } from '../data/site';
     color: var(--text);
   }
 
-  .placeholder {
-    color: var(--text-faint);
-    font-size: var(--text-small);
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .hero__figure {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: center;
+    max-inline-size: 22rem;
+    inline-size: 100%;
+    justify-self: center;
+  }
+
+  .hero__figure figcaption {
+    text-align: center;
+  }
+
+  @media (min-width: 64rem) {
+    .hero__grid {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      align-items: center;
+      gap: var(--space-8);
+      padding-block-start: var(--space-9);
+    }
   }
 </style>

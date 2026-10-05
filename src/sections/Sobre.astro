@@ -1,15 +1,61 @@
 ---
 import Section from '../components/Section.astro';
+import ApiResponse from '../components/ApiResponse.astro';
+import { site } from '../data/site';
 ---
 
 <Section id="sobre">
   <Fragment slot="title">Estudo backend escrevendo <em>APIs</em></Fragment>
-  <p class="placeholder">Conteúdo na etapa 3.</p>
+  <div class="about">
+    <div class="about__text">
+      <p>
+        Estou no 3º período de Tecnologia em Sistemas para Internet na UTFPR, campus Guarapuava. Meu foco
+        é backend: PHP com Laravel, APIs REST, Docker e MySQL. Também contribuo em um projeto Rails da
+        equipe do curso.
+      </p>
+      <p>
+        Antes de usar Laravel, escrevi uma API em PHP puro para ver o que o framework faz por mim. Nos
+        projetos desta página, registro o que decidi, o que descartei e onde a decisão para de funcionar.
+      </p>
+    </div>
+    <ApiResponse
+      method="GET"
+      path="/sobre"
+      status={200}
+      statusText="OK"
+      body={{
+        nome: site.name,
+        formacao: 'Sistemas para Internet · UTFPR Guarapuava · 3º período · previsão 2028',
+        foco: ['PHP', 'Laravel', 'APIs REST', 'Docker', 'MySQL'],
+        busco: 'Estágio em backend ou full stack',
+        formato: ['remoto', 'presencial em Guarapuava e região'],
+      }}
+    />
+  </div>
 </Section>
 
 <style>
-  .placeholder {
-    color: var(--text-faint);
-    font-size: var(--text-small);
+  .about {
+    display: grid;
+    gap: var(--space-7);
+    align-items: start;
+  }
+
+  .about__text {
+    display: grid;
+    gap: var(--space-5);
+    max-width: var(--measure);
+    color: var(--text-muted);
+  }
+
+  .about__text p:first-child {
+    color: var(--text);
+  }
+
+  @media (min-width: 64rem) {
+    .about {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-8);
+    }
   }
 </style>

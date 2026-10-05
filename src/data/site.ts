@@ -3,6 +3,7 @@ export const site = {
   title: 'Guilherme Bondezan · Backend em formação',
   description:
     'Estudante de Sistemas para Internet na UTFPR Guarapuava, buscando estágio em backend ou full stack. Cada projeto mostra o problema, a decisão e onde ela deixa de funcionar.',
+  availability: ['Disponível para estágio', 'backend / full stack', 'remoto ou Guarapuava e região'],
   links: {
     email: 'gui.gastaldo@gmail.com',
     linkedin: 'https://www.linkedin.com/in/guilhermebondezan',

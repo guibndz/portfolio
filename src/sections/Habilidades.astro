@@ -1,15 +1,87 @@
 ---
 import Section from '../components/Section.astro';
+import { useiEmProjeto, estudando } from '../data/habilidades';
 ---
 
 <Section id="habilidades">
   <Fragment slot="title">O que já usei, e <em>onde</em></Fragment>
-  <p class="placeholder">Conteúdo na etapa 3.</p>
+  <div class="skills">
+    <div class="skills__group">
+      <h3 class="label">Usei em projeto</h3>
+      <dl class="skills__list">
+        {
+          useiEmProjeto.map((item) => (
+            <div class="skills__row">
+              <dt>{item.nome}</dt>
+              <dd>{item.onde}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+    <div class="skills__group">
+      <h3 class="label">Estudando</h3>
+      <ul class="skills__studying" role="list">
+        {estudando.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </div>
 </Section>
 
 <style>
-  .placeholder {
-    color: var(--text-faint);
+  .skills {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .skills__group {
+    display: grid;
+    align-content: start;
+    gap: var(--space-4);
+  }
+
+  .skills__list {
+    display: grid;
+  }
+
+  .skills__row {
+    display: grid;
+    gap: var(--space-1);
+    padding-block: var(--space-4);
+    border-block-end: var(--border);
+  }
+
+  .skills__row dt {
+    font-weight: 500;
+  }
+
+  .skills__row dd {
     font-size: var(--text-small);
+    color: var(--text-muted);
+  }
+
+  .skills__studying {
+    display: grid;
+  }
+
+  .skills__studying li {
+    padding-block: var(--space-4);
+    border-block-end: var(--border);
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 48rem) {
+    .skills__row {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-5);
+      align-items: baseline;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .skills {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: var(--space-9);
+    }
   }
 </style>
