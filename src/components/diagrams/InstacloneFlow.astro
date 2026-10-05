@@ -66,7 +66,7 @@ const cx = nodeX + nodeW / 2;
     <rect class="flow__service" x="16" y="110" width="268" height="290" rx="6"></rect>
     <!-- Rótulos nos cantos para não cruzar a linha central do fluxo -->
     <text class="flow__label" x="28" y="128">service app</text>
-    <text class="flow__label" x="272" y="393" text-anchor="end">FrankenPHP · :8000</text>
+    <text class="flow__label" x="272" y="393" text-anchor="end">FrankenPHP :8000</text>
   </g>
 
   {
@@ -158,6 +158,27 @@ const cx = nodeX + nodeW / 2;
     font-family: var(--font-mono);
     font-size: 10.5px;
     letter-spacing: 0.04em;
+  }
+
+  /* Alto contraste: o navegador não troca as cores de um SVG; troco aqui. */
+  @media (forced-colors: active) {
+    .flow__service,
+    .flow__node {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+
+    .flow__compose,
+    .flow__edge {
+      stroke: CanvasText;
+    }
+
+    .flow__arrowhead,
+    .flow__title,
+    .flow__sub,
+    .flow__label {
+      fill: CanvasText;
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {

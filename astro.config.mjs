@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // Fontes self-hosted a partir dos pacotes @fontsource-variable instalados.
 // Só o subset latin (cobre á, ã, ç, õ) e só o eixo de peso: o eixo de
@@ -10,6 +11,16 @@ const fontsource = (pkg, file) => `./node_modules/@fontsource-variable/${pkg}/fi
 export default defineConfig({
   // TODO(Guilherme): confirmar o domínio final na etapa 6 (deploy).
   site: 'https://guilhermebondezan.vercel.app',
+  // URLs sem barra no fim (/projetos/instaclone-api): cada página vira um
+  // .html e a Vercel serve sem a extensão (cleanUrls em vercel.json).
+  trailingSlash: 'never',
+  build: {
+    format: 'file',
+    // O CSS do site inteiro tem uns 6 KB comprimido: vai no HTML e não
+    // bloqueia a primeira pintura com outra requisição.
+    inlineStylesheets: 'always',
+  },
+  integrations: [sitemap()],
   fonts: [
     {
       name: 'Newsreader',

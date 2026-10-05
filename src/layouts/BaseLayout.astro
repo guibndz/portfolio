@@ -2,14 +2,33 @@
 import { Font } from 'astro:assets';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import { site } from '../data/site';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description: string;
+  /** Caminho da imagem de compartilhamento, gerada em src/pages/og. */
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article';
+  /** Para o 404: fora dos buscadores e sem URL canônica. */
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const {
+  title,
+  description,
+  image = '/og/inicio.png',
+  imageAlt = `${site.name}: backend em formação. Cada projeto mostra o problema, a decisão e onde ela deixa de funcionar.`,
+  type = 'website',
+  noindex = false,
+} = Astro.props;
+
+// Com build.format 'file', o pathname no build termina em .html.
+const pathname = Astro.url.pathname.replace(/(\/index)?\.html$/, '') || '/';
+const canonical = new URL(pathname, Astro.site);
+const imageUrl = new URL(image, Astro.site);
 ---
 
 <!doctype html>
@@ -21,7 +40,27 @@ const { title, description } = Astro.props;
     <style is:inline>@layer reset, base, utilities;</style>
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <meta name="theme-color" content="#0c0b10" />
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {!noindex && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <Font cssVariable="--font-newsreader" preload={[{ style: 'normal' }]} />
     <Font cssVariable="--font-schibsted" preload={[{ style: 'normal' }]} />
     <Font cssVariable="--font-jetbrains" />

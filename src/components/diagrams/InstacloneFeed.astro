@@ -145,4 +145,27 @@ const ids = ['3', '8', '15', '21', '…', 'n'];
     font-family: var(--font-body);
     font-size: 11.5px;
   }
+
+  /* Alto contraste: o navegador não troca as cores de um SVG; troco aqui. */
+  @media (forced-colors: active) {
+    .feed__box {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+
+    .feed__pill,
+    .feed__chip,
+    .feed__edge {
+      stroke: CanvasText;
+    }
+
+    .feed__arrowhead,
+    .feed__label,
+    .feed__code,
+    .feed__note,
+    .feed__chip-text,
+    .feed__limit {
+      fill: CanvasText;
+    }
+  }
 </style>

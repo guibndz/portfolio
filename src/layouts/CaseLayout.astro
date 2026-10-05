@@ -18,7 +18,13 @@ const diagrama = data.diagrama ? diagramas[data.diagrama] : undefined;
 const repoLabel = data.repo.replace('https://', '');
 ---
 
-<BaseLayout title={`${data.titulo} · ${site.name}`} description={data.problema}>
+<BaseLayout
+  title={`${data.titulo} · ${site.name}`}
+  description={data.problema}
+  image={`/og/projetos/${projeto.id}.png`}
+  imageAlt={`Case ${data.titulo}, de ${site.name}: ${data.problema}`}
+  type="article"
+>
   <article class="case">
     <header class="container case__head">
       <a class="case__back" href="/#projetos"><span aria-hidden="true">←</span>Projetos</a>
