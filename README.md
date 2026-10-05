@@ -88,3 +88,16 @@ do tipo e do `problema`. Não precisa fazer nada.
   as imagens de compartilhamento, o sitemap e o `robots.txt`.
 - As URLs não têm barra no fim (`/projetos/instaclone-api`). O build gera um `.html`
   por página, e o `vercel.json` (`cleanUrls`) faz a Vercel servir sem a extensão.
+
+## Deploy
+
+O site está em <https://guilhermebondezan.vercel.app>, no projeto `guilhermebondezan` da Vercel.
+As configurações de build ficam em `vercel.json`.
+
+Para publicar uma nova versão:
+
+```sh
+npx vercel deploy --prod
+```
+
+Com o repositório conectado à Vercel (`npx vercel git connect`), todo push na `main` publica sozinho.

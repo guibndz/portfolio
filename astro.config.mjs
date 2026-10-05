@@ -9,7 +9,7 @@ import sitemap from '@astrojs/sitemap';
 const fontsource = (pkg, file) => `./node_modules/@fontsource-variable/${pkg}/files/${file}`;
 
 export default defineConfig({
-  // TODO(Guilherme): confirmar o domínio final na etapa 6 (deploy).
+  // Com domínio próprio, trocar aqui: canonical, OG, sitemap e robots.txt usam este valor.
   site: 'https://guilhermebondezan.vercel.app',
   // URLs sem barra no fim (/projetos/instaclone-api): cada página vira um
   // .html e a Vercel serve sem a extensão (cleanUrls em vercel.json).
