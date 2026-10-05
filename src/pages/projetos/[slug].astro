@@ -1,0 +1,18 @@
+---
+import { getCollection, render } from 'astro:content';
+import CaseLayout from '../../layouts/CaseLayout.astro';
+import { assertCaseStructure } from '../../lib/case';
+
+export async function getStaticPaths() {
+  const projetos = await getCollection('projetos', ({ data }) => data.temCase && !data.draft);
+  return projetos.map((projeto) => ({ params: { slug: projeto.id }, props: { projeto } }));
+}
+
+const { projeto } = Astro.props;
+const { Content, headings } = await render(projeto);
+assertCaseStructure(projeto.id, headings, projeto.body);
+---
+
+<CaseLayout projeto={projeto} headings={headings}>
+  <Content />
+</CaseLayout>

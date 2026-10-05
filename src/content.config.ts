@@ -29,12 +29,18 @@ const projetos = defineCollection({
       ordem: z.number().int(),
       /** Tem página de case em /projetos/[slug]. */
       temCase: z.boolean().default(false),
+      /** Diagrama SVG do topo do case (ver src/components/diagrams). */
+      diagrama: z.enum(['instaclone-feed']).optional(),
       /** Rascunho: não aparece no site. */
       draft: z.boolean().default(false),
     })
     .refine((projeto) => projeto.tipo !== 'Em equipe' || (projeto.minhaParte?.length ?? 0) > 0, {
       message: 'Projeto em equipe precisa de "minhaParte": o card deixa explícito o que foi meu.',
       path: ['minhaParte'],
+    })
+    .refine((projeto) => !projeto.temCase || projeto.diagrama !== undefined, {
+      message: 'Todo case precisa de um diagrama: defina "diagrama".',
+      path: ['diagrama'],
     }),
 });
 

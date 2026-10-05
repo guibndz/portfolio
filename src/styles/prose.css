@@ -1,0 +1,85 @@
+/* Texto longo dos cases (Markdown renderizado). */
+@layer base {
+  .prose {
+    counter-reset: case-section;
+    max-width: var(--measure);
+    color: var(--text);
+  }
+
+  .prose > * + * {
+    margin-block-start: var(--space-5);
+  }
+
+  /* Cada H2 ganha o rótulo mono "01", "02"... como as seções da home. */
+  .prose h2 {
+    counter-increment: case-section;
+    margin-block-start: var(--space-9);
+    padding-block-start: var(--space-5);
+    border-block-start: var(--border);
+    font-size: clamp(1.75rem, 1.4286rem + 1.6071vw, 2.875rem); /* 28 → 46 */
+  }
+
+  .prose h2:first-child {
+    margin-block-start: 0;
+  }
+
+  .prose h2::before {
+    content: counter(case-section, decimal-leading-zero);
+    display: block;
+    margin-block-end: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--accent-text);
+  }
+
+  .prose h3 {
+    margin-block-start: var(--space-8);
+  }
+
+  .prose h2 + *,
+  .prose h3 + * {
+    margin-block-start: var(--space-4);
+  }
+
+  .prose ul {
+    display: grid;
+    gap: var(--space-2);
+    padding-inline-start: 1.2em;
+  }
+
+  .prose li::marker {
+    color: var(--accent-text);
+  }
+
+  .prose :not(pre) > code {
+    padding: 0.1em 0.35em;
+    border-radius: var(--radius-sm);
+    background: var(--surface-raised);
+    font-size: 0.85em;
+    overflow-wrap: anywhere;
+  }
+
+  /* Alternativa descartada de cada decisão. */
+  .prose blockquote {
+    padding: var(--space-4) var(--space-5);
+    border-inline-start: 2px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--text-muted);
+  }
+
+  .prose blockquote > * + * {
+    margin-block-start: var(--space-3);
+  }
+
+  .prose blockquote strong:first-child {
+    display: block;
+    margin-block-end: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+}

@@ -1,0 +1,250 @@
+---
+import type { MarkdownHeading } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import { diagramas } from '../components/diagrams';
+import { site } from '../data/site';
+import '../styles/prose.css';
+
+interface Props {
+  projeto: CollectionEntry<'projetos'>;
+  headings: MarkdownHeading[];
+}
+
+const { projeto, headings } = Astro.props;
+const { data } = projeto;
+const sections = headings.filter((heading) => heading.depth === 2);
+const diagrama = data.diagrama ? diagramas[data.diagrama] : undefined;
+const repoLabel = data.repo.replace('https://', '');
+---
+
+<BaseLayout title={`${data.titulo} · ${site.name}`} description={data.problema}>
+  <article class="case">
+    <header class="container case__head">
+      <a class="case__back" href="/#projetos"><span aria-hidden="true">←</span>Projetos</a>
+      <p class="label">Case · {data.tipo}</p>
+      <h1>{data.titulo}</h1>
+      <p class="case__lede">{data.problema}</p>
+
+      <dl class="case__meta">
+        <div>
+          <dt class="label">Período</dt>
+          <dd>{data.periodo}</dd>
+        </div>
+        {
+          data.contexto && (
+            <div>
+              <dt class="label">Contexto</dt>
+              <dd>{data.contexto}</dd>
+            </div>
+          )
+        }
+        <div>
+          <dt class="label">Stack</dt>
+          <dd>{data.stack.join(' · ')}</dd>
+        </div>
+        <div>
+          <dt class="label">Código</dt>
+          <dd><a href={data.repo}>{repoLabel}</a></dd>
+        </div>
+      </dl>
+    </header>
+
+    {
+      diagrama && (
+        <figure class="container case__figure">
+          <div class="case__diagram">
+            <diagrama.component />
+          </div>
+          <figcaption>
+            <span class="label">Fig. 1</span> {diagrama.legenda}
+          </figcaption>
+        </figure>
+      )
+    }
+
+    <div class="container case__body">
+      <nav class="case__toc" aria-label="Seções do case">
+        <p class="label">Nesta página</p>
+        <ol role="list">
+          {
+            sections.map((section, index) => (
+              <li>
+                <a href={`#${section.slug}`}>
+                  <span class="case__toc-index" aria-hidden="true">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  {section.text}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <div class="prose">
+        <slot />
+      </div>
+    </div>
+
+    <footer class="container case__foot">
+      <a href={data.repo}>Ver o código no GitHub<span aria-hidden="true"> →</span></a>
+      <a href="/#projetos">Voltar aos projetos</a>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .case__head {
+    display: grid;
+    gap: var(--space-5);
+    padding-block-start: var(--space-8);
+  }
+
+  .case__back {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 2.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .case__back:hover {
+    color: var(--text);
+  }
+
+  .case__lede {
+    max-width: 34ch;
+    font-family: var(--font-display);
+    font-size: var(--text-lede);
+    line-height: 1.35;
+    color: var(--text-muted);
+  }
+
+  .case__meta {
+    display: grid;
+    gap: var(--space-4) var(--space-7);
+    margin-block-start: var(--space-4);
+    padding-block-start: var(--space-5);
+    border-block-start: var(--border);
+  }
+
+  .case__meta div {
+    display: grid;
+    gap: var(--space-1);
+    align-content: start;
+  }
+
+  .case__meta dd {
+    font-size: var(--text-small);
+    color: var(--text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .case__figure {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-4);
+    margin-block-start: var(--space-9);
+  }
+
+  /* Sem padding lateral no mobile: o SVG já tem margem própria e o texto fica maior. */
+  .case__diagram {
+    inline-size: 100%;
+    max-inline-size: 26rem;
+    padding: var(--space-5) 0;
+    border: var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .case__figure figcaption {
+    max-width: 44ch;
+    text-align: center;
+    font-size: var(--text-small);
+    color: var(--text-muted);
+  }
+
+  .case__body {
+    display: grid;
+    gap: var(--space-8);
+    margin-block-start: var(--space-9);
+  }
+
+  .case__toc {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+
+  .case__toc ol {
+    display: grid;
+  }
+
+  .case__toc a {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 2.5rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: var(--text-small);
+  }
+
+  .case__toc a:hover {
+    color: var(--text);
+  }
+
+  .case__toc-index {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    color: var(--accent-text);
+  }
+
+  .case__foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-7);
+    margin-block-start: var(--space-9);
+    padding-block-start: var(--space-6);
+    border-block-start: var(--border);
+  }
+
+  .case__foot a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-weight: 500;
+  }
+
+  @media (min-width: 48rem) {
+    .case__diagram {
+      padding: var(--space-6) var(--space-4);
+    }
+
+    .case__meta {
+      grid-template-columns: auto auto minmax(0, 2fr) auto;
+      justify-content: start;
+    }
+  }
+
+  /* Desktop: índice fixo à esquerda, texto à direita. */
+  @media (min-width: 64rem) {
+    .case__body {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: var(--space-9);
+    }
+
+    .case__toc {
+      position: sticky;
+      inset-block-start: calc(var(--header-height) + var(--space-6));
+      align-self: start;
+    }
+  }
+</style>

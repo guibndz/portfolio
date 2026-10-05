@@ -1,0 +1,148 @@
+---
+// Como uma página do feed do InstaClone API é montada.
+// Fonte: app/Services/FeedService.php e o log de consultas de GET /api/feed
+// (três consultas, fora as da autenticação).
+const boxX = 16;
+const boxW = 268;
+const textX = boxX + 14;
+const cx = 150;
+const ids = ['3', '8', '15', '21', '…', 'n'];
+---
+
+<svg class="feed" viewBox="0 0 300 504" role="img" aria-labelledby="feed-title feed-desc">
+  <title id="feed-title">Como o feed do InstaClone API é montado</title>
+  <desc id="feed-desc">
+    Uma requisição GET /api/feed faz três consultas. A primeira busca os IDs de todos os perfis que o
+    usuário segue, uma entrada por perfil. A segunda busca os posts desses autores com whereIn, conta
+    curtidas e comentários em subconsultas e pagina por cursor; para devolver 11 linhas, o MySQL
+    ordena os posts de todos os autores seguidos. A terceira carrega os autores da página em uma
+    consulta só. A resposta traz 10 posts e o cursor da próxima página.
+  </desc>
+
+  <defs>
+    <marker
+      id="feed-arrow"
+      viewBox="0 0 8 8"
+      refX="8"
+      refY="4"
+      markerUnits="userSpaceOnUse"
+      markerWidth="7"
+      markerHeight="7"
+      orient="auto"
+    >
+      <path class="feed__arrowhead" d="M0 0 L8 4 L0 8 z"></path>
+    </marker>
+  </defs>
+
+  <!-- Requisição -->
+  <rect class="feed__pill" x={cx - 80} y="8" width="160" height="32" rx="16"></rect>
+  <text class="feed__code" x={cx} y="28" text-anchor="middle">GET /api/feed</text>
+  <line class="feed__edge" x1={cx} y1="40" x2={cx} y2="64" marker-end="url(#feed-arrow)"></line>
+
+  <!-- Consulta 1: IDs seguidos -->
+  <rect class="feed__box" x={boxX} y="64" width={boxW} height="64" rx="4"></rect>
+  <text class="feed__label" x={textX} y="82">consulta 1 · follows</text>
+  <text class="feed__code" x={textX} y="101">following()-&gt;pluck('users.id')</text>
+  <text class="feed__note" x={textX} y="117">IDs de todos os perfis seguidos</text>
+
+  <!-- A lista que cresce -->
+  {
+    ids.map((id, index) => (
+      <g>
+        <rect class="feed__chip" x={boxX + 14 + index * 38} y="140" width="32" height="20" rx="3" />
+        <text class="feed__chip-text" x={boxX + 30 + index * 38} y="154" text-anchor="middle">
+          {id}
+        </text>
+      </g>
+    ))
+  }
+  <text class="feed__limit" x={textX} y="178">um item por perfil seguido</text>
+  <line class="feed__edge" x1={cx} y1="186" x2={cx} y2="208" marker-end="url(#feed-arrow)"></line>
+
+  <!-- Consulta 2: posts -->
+  <rect class="feed__box" x={boxX} y="208" width={boxW} height="96" rx="4"></rect>
+  <text class="feed__label" x={textX} y="226">consulta 2 · posts</text>
+  <text class="feed__code" x={textX} y="245">whereIn('user_id', $ids)</text>
+  <text class="feed__code" x={textX} y="261">-&gt;withCount(['likes', 'comments'])</text>
+  <text class="feed__code" x={textX} y="277">-&gt;latest()-&gt;cursorPaginate(10)</text>
+  <text class="feed__note" x={textX} y="294">contagens como subconsultas</text>
+  <text class="feed__limit" x={textX} y="322">ordena os posts de todos os</text>
+  <text class="feed__limit" x={textX} y="337">seguidos antes do LIMIT 11</text>
+  <line class="feed__edge" x1={cx} y1="346" x2={cx} y2="368" marker-end="url(#feed-arrow)"></line>
+
+  <!-- Consulta 3: autores -->
+  <rect class="feed__box" x={boxX} y="368" width={boxW} height="64" rx="4"></rect>
+  <text class="feed__label" x={textX} y="386">consulta 3 · users</text>
+  <text class="feed__code" x={textX} y="405">with('user:id,name,…')</text>
+  <text class="feed__note" x={textX} y="421">autores da página, numa consulta</text>
+  <line class="feed__edge" x1={cx} y1="432" x2={cx} y2="456" marker-end="url(#feed-arrow)"></line>
+
+  <!-- Resposta -->
+  <rect class="feed__pill" x={cx - 100} y="456" width="200" height="32" rx="16"></rect>
+  <text class="feed__code" x={cx} y="476" text-anchor="middle">10 posts + next_cursor</text>
+</svg>
+
+<style>
+  .feed {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .feed__box {
+    fill: var(--surface-raised);
+    stroke: var(--line-strong);
+  }
+
+  .feed__pill {
+    fill: none;
+    stroke: var(--text-faint);
+  }
+
+  .feed__chip {
+    fill: none;
+    stroke: var(--accent);
+  }
+
+  .feed__edge {
+    stroke: var(--accent);
+    stroke-width: 1.5;
+  }
+
+  .feed__arrowhead {
+    fill: var(--accent);
+  }
+
+  .feed__label {
+    fill: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+  }
+
+  .feed__code {
+    fill: var(--text);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-variant-ligatures: none;
+  }
+
+  .feed__note {
+    fill: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 11.5px;
+  }
+
+  .feed__chip-text {
+    fill: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+  }
+
+  /* O limite do desenho: texto em --accent-text (7.3:1), não em --accent. */
+  .feed__limit {
+    fill: var(--accent-text);
+    font-family: var(--font-body);
+    font-size: 11.5px;
+  }
+</style>
