@@ -77,9 +77,10 @@
   --gutter: clamp(1rem, 0.4286rem + 2.8571vw, 3rem); /* 16 → 48 */
   --section-gap: clamp(6rem, 4.8571rem + 5.7143vw, 10rem); /* 96 → 160 */
 
-  /* Largura */
+  /* Largura e altura */
   --measure: 65ch;
   --content-max: 72rem;
+  --header-height: 4rem; /* header fixo, só a partir de 64rem */
 
   /* Forma */
   --radius-sm: 0.25rem;

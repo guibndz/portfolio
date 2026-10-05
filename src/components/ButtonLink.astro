@@ -1,0 +1,51 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'a'> {
+  href: string;
+  variant?: 'primary' | 'secondary';
+}
+
+const { href, variant = 'secondary', class: className, ...rest } = Astro.props;
+---
+
+<a href={href} class:list={['button', `button--${variant}`, className]} {...rest}><slot /></a>
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 2.75rem;
+    padding-inline: var(--space-5);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    line-height: 1.2;
+    text-decoration: none;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  /* --accent com texto branco: 5.7:1. O hover escurece para não perder contraste. */
+  .button--primary {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .button--primary:hover {
+    background: color-mix(in oklab, var(--accent) 82%, black);
+  }
+
+  .button--secondary {
+    border-color: var(--line-strong);
+    color: var(--text);
+  }
+
+  .button--secondary:hover {
+    border-color: var(--text-muted);
+  }
+</style>

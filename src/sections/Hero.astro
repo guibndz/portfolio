@@ -1,0 +1,39 @@
+---
+import { site } from '../data/site';
+---
+
+<section id="inicio" class="hero" aria-labelledby="inicio-titulo">
+  <div class="container hero__inner">
+    <h1 id="inicio-titulo">{site.name}</h1>
+    <p class="hero__lede">
+      Backend em formação. Cada projeto aqui mostra o problema, a decisão e onde ela <em>deixa de
+      funcionar</em>.
+    </p>
+    <p class="placeholder">Selo, botões e diagrama do InstaClone na etapa 3.</p>
+  </div>
+</section>
+
+<style>
+  .hero__inner {
+    display: grid;
+    gap: var(--space-6);
+    padding-block-start: var(--space-9);
+  }
+
+  .hero__lede {
+    max-width: 30ch;
+    font-family: var(--font-display);
+    font-size: var(--text-lede);
+    line-height: 1.35;
+    color: var(--text-muted);
+  }
+
+  .hero__lede em {
+    color: var(--text);
+  }
+
+  .placeholder {
+    color: var(--text-faint);
+    font-size: var(--text-small);
+  }
+</style>

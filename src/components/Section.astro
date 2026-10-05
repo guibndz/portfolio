@@ -1,0 +1,48 @@
+---
+import { sections, sectionIndex, type SectionId } from '../data/site';
+
+interface Props {
+  id: SectionId;
+}
+
+const { id } = Astro.props;
+const label = sections.find((section) => section.id === id)?.label;
+const titleId = `${id}-titulo`;
+---
+
+<section id={id} class="section" aria-labelledby={titleId}>
+  <div class="container">
+    <header class="section__head">
+      <p class="label"><span class="section__index">{sectionIndex(id)}</span> · {label}</p>
+      <h2 id={titleId}><slot name="title" /></h2>
+    </header>
+    <div class="section__body">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block-start: var(--section-gap);
+  }
+
+  .section__head {
+    display: grid;
+    gap: var(--space-4);
+    padding-block-start: var(--space-5);
+    border-block-start: var(--border);
+  }
+
+  .section__head h2 {
+    max-width: 20ch;
+  }
+
+  .section__index {
+    color: var(--accent-text);
+  }
+
+  .section__body {
+    margin-block-start: var(--space-7);
+  }
+</style>

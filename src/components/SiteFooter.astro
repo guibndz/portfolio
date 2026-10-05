@@ -1,0 +1,50 @@
+---
+import { site } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p>{site.name} · {year}</p>
+    <p>
+      Site estático em Astro, CSS próprio e zero JavaScript no navegador.{' '}
+      <a href={site.links.source}>Código no GitHub</a>.
+    </p>
+    <a class="back-to-top" href="#topo">Voltar ao topo</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-block-start: var(--section-gap);
+    border-block-start: var(--border);
+    font-size: var(--text-small);
+    color: var(--text-muted);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    gap: var(--space-3);
+    padding-block: var(--space-7);
+  }
+
+  .back-to-top {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 48rem) {
+    .site-footer__inner {
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: var(--space-6);
+    }
+  }
+</style>

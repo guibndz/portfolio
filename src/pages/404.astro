@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ApiResponse from '../components/ApiResponse.astro';
+import ButtonLink from '../components/ButtonLink.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title={`Página não encontrada · ${site.name}`}
+  description="Este endereço não existe no site."
+>
+  <section class="container not-found" aria-labelledby="erro-titulo">
+    <div class="not-found__text">
+      <p class="label"><span class="not-found__code">404</span> · Não encontrado</p>
+      <h1 id="erro-titulo">Essa rota <em>não existe</em></h1>
+      <p class="not-found__lede">
+        O endereço pode estar digitado errado ou ter mudado. Os projetos continuam na página principal.
+      </p>
+      <div class="not-found__actions">
+        <ButtonLink href="/#projetos" variant="primary">Ver projetos</ButtonLink>
+        <ButtonLink href="/">Voltar ao início</ButtonLink>
+      </div>
+    </div>
+    <ApiResponse
+      method="GET"
+      path="/:rota"
+      status={404}
+      statusText="Not Found"
+      body={{
+        status: 404,
+        erro: 'Nenhuma rota corresponde a este endereço.',
+        rotas: ['/', '/#projetos', '/#contato'],
+      }}
+    />
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+    padding-block-start: var(--space-9);
+  }
+
+  .not-found__text {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .not-found__code {
+    color: var(--accent-text);
+  }
+
+  .not-found__lede {
+    max-width: 40ch;
+    color: var(--text-muted);
+  }
+
+  .not-found__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-block-start: var(--space-3);
+  }
+
+  @media (min-width: 64rem) {
+    .not-found {
+      grid-template-columns: 1.2fr 1fr;
+      min-height: 60vh;
+    }
+  }
+</style>
