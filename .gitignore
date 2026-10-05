@@ -1,0 +1,16 @@
+# build
+dist/
+.astro/
+.vercel/
+
+# dependências
+node_modules/
+
+# ambiente
+.env
+.env.*
+!.env.example
+
+# sistema e editor
+.DS_Store
+*.log

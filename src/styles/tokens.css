@@ -1,0 +1,94 @@
+/*
+ * Tokens de design.
+ *
+ * Contraste medido sobre --bg (#0C0B10), critério WCAG 2.x:
+ *   --text         16.3:1
+ *   --text-muted    7.5:1
+ *   --text-faint    5.5:1  (4.75:1 sobre --surface-raised)
+ *   --accent-text   7.3:1
+ *   --accent        3.4:1  -> não passa AA como texto. Use só como
+ *                            preenchimento (texto --on-accent: 5.7:1)
+ *                            ou traço de SVG (mínimo 3:1 para não texto).
+ *
+ * Escala fluida: valores mínimos em 320px e máximos em 1440px. A parte em
+ * rem do clamp() mantém o zoom do navegador funcionando.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* Cor */
+  --bg: #0c0b10;
+  --surface: #15131c;
+  --surface-raised: #1e1b27;
+  --line: #2a2633;
+  --line-strong: #3a3546;
+
+  --text: #ece9f2;
+  --text-muted: #a29db0;
+  --text-faint: #8a8599;
+
+  --accent: #7c3aed;
+  --accent-text: #a98bfa;
+  --on-accent: #ffffff;
+
+  --focus-ring: var(--accent-text);
+  --selection: color-mix(in oklab, var(--accent) 55%, var(--bg));
+
+  /* Família */
+  --font-display: var(--font-newsreader);
+  --font-body: var(--font-schibsted);
+  --font-mono: var(--font-jetbrains);
+
+  /* Tamanho */
+  --text-label: 0.75rem; /* 12px, mono em caixa alta */
+  --text-small: clamp(0.875rem, 0.8571rem + 0.0893vw, 0.9375rem); /* 14 → 15 */
+  --text-body: clamp(1.0625rem, 1.0446rem + 0.0893vw, 1.125rem); /* 17 → 18 */
+  --text-lede: clamp(1.25rem, 1.1071rem + 0.7143vw, 1.75rem); /* 20 → 28 */
+  --text-h3: clamp(1.375rem, 1.2679rem + 0.5357vw, 1.75rem); /* 22 → 28 */
+  --text-h2: clamp(2rem, 1.5rem + 2.5vw, 3.75rem); /* 32 → 60 */
+  --text-h1: clamp(2.75rem, 1.6786rem + 5.3571vw, 6.5rem); /* 44 → 104 */
+
+  /* Peso */
+  --weight-body: 400;
+  --weight-strong: 600;
+  --weight-display: 420;
+
+  /* Entrelinha e espacejamento */
+  --leading-display: 1.02;
+  --leading-heading: 1.12;
+  --leading-body: 1.6;
+  --tracking-display: -0.022em;
+  --tracking-heading: -0.012em;
+  --tracking-label: 0.08em;
+
+  /* Espaço (base 4px) */
+  --space-1: 0.25rem; /* 4 */
+  --space-2: 0.5rem; /* 8 */
+  --space-3: 0.75rem; /* 12 */
+  --space-4: 1rem; /* 16 */
+  --space-5: 1.5rem; /* 24 */
+  --space-6: 2rem; /* 32 */
+  --space-7: 3rem; /* 48 */
+  --space-8: 4rem; /* 64 */
+  --space-9: 6rem; /* 96 */
+  --space-10: 8rem; /* 128 */
+
+  --gutter: clamp(1rem, 0.4286rem + 2.8571vw, 3rem); /* 16 → 48 */
+  --section-gap: clamp(6rem, 4.8571rem + 5.7143vw, 10rem); /* 96 → 160 */
+
+  /* Largura */
+  --measure: 65ch;
+  --content-max: 72rem;
+
+  /* Forma */
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --border: 1px solid var(--line);
+
+  /* Movimento */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration: 300ms;
+  --duration-slow: 700ms;
+}
