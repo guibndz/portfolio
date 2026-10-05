@@ -94,10 +94,11 @@ do tipo e do `problema`. Não precisa fazer nada.
 O site está em <https://guilhermebondezan.vercel.app>, no projeto `guilhermebondezan` da Vercel.
 As configurações de build ficam em `vercel.json`.
 
-Para publicar uma nova versão:
+O repositório está conectado à Vercel: todo push na `main` publica o site, e cada
+pull request ganha uma URL de prévia.
+
+Para publicar sem passar pelo GitHub:
 
 ```sh
 npx vercel deploy --prod
 ```
-
-Com o repositório conectado à Vercel (`npx vercel git connect`), todo push na `main` publica sozinho.
